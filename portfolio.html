@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="robots" content="noindex, nofollow">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/lib/aos/2.3.4/aos.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.1.1/dist/css/yakuhanjp.css">
+        <title>Sho Nishimura's Portfolio</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            
+            body{
+                font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+                background-color: #121212;
+                color: #fff;
+                line-height: 1.6;
+            }
+            /*固定ナビゲーションバー*/
+            nav {
+                background: #1f1f2f;
+                height: 60px;
+                line-height: 60px;
+                padding: 0;
+                position: fixed;
+                width: 100%;
+                top: 0;
+                left: 0;
+                z-index: 100;
+                transition: background 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px;
+            }
+
+            /*スクロール時に縮小、背景をやや透明に*/
+            nav.scrolled{
+                padding: 10px;
+                background: rgba(31, 31, 47, 0.9);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+            nav ul{
+                list-style: none;
+                display: flex;
+                /*justify-content: center;*/
+            }
+            nav ul li{
+                margin: 0 20px;
+            }
+            nav ul li a{
+                color: #fff;
+                text-decoration: none;
+                font-size: 1rem;
+                transition: color 0.3s ease;
+            }
+            nav ul li a:hover{
+                color: #e0a800; /*アクセント*/
+            }
+
+            /*モバイル用メニュー(デフォルトは非表示)*/
+            .menu-toggle{
+                display: none;
+                font-size: 1.8rem;
+                background: none;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            /*ヒーローセクション*/
+            header{
+                background: url('img/MyImage.jpg') no-repeat center center/cover;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                text-align: center;
+            }
+
+            /* ヒーロー用のオーバーレイ */
+            header::after {
+                content: '';
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1;
+            }
+            header h1 {
+                position: relative;
+                font-size: 3rem;
+                letter-spacing: 2px;
+                z-index: 2;
+            }
+            
+            /* メインコンテンツ */
+            main {
+                padding: 100px 20px 60px; /* ナビゲーション分の余白を考慮 */
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            section {
+                margin-bottom: 60px;
+            }
+            section h2 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #e0a800;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+            section h3 {
+                font-size: 1.2rem;             /* h2 より少し小さめに */
+                margin-bottom: 15px;           /* h2 よりも若干余裕を持たせる */
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-left: 10px;            /* 左側にスペースを作る */
+                border-left: 4px solid #e0a800; /* アクセントカラーで左側にラインを入れる */
+                color: #fff;       /* もう一つのアクセントカラーでテキストを表示 */
+            }
+            section ul{
+                margin-left: 5%;
+            }
+            p {
+                margin-bottom: 15px;
+            }
+            a {
+                color: #e0a800;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+            
+            /* プロジェクトカード */
+            article {
+                background: #1f1f1f;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                transition: transform 0.3s ease;
+            }
+            article:hover {
+                transform: translateY(-5px);
+            }
+            article h3 {
+                margin-bottom: 10px;
+            }
+            article a {
+                color: #e0a800;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+            article a:hover {
+                text-decoration: underline;
+            }
+            
+            /* フッター */
+            footer {
+                background: #1f1f1f;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            /* レスポンシブ対応 */
+            @media (max-width: 768px) {
+                .menu-toggle{
+                    display: block;
+                }
+                nav ul {
+                    display: none;
+                    flex-direction: column;
+                    background: #1f1f2f;
+                    position: absolute;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    padding: 10px 0;
+                }
+
+                /* メニューが開いたとき */
+                nav ul.show {
+                    display: flex;
+                }
+
+                nav ul li {
+                    margin: 10px 0;
+                }
+            }
+
+            .projects-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                /*grid-template-columns: repeat(2, 1fr);*/
+                gap: 20px;
+                margin-top: 20px;
+            }
+            .projects-grid img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                object-fit: cover;
+                border-radius: 10px;
+                padding: 4px;
+                padding-bottom: 8px;
+            }
+
+            .skills-grid{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+            
+            .awards-container{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .awards-container h3{
+                margin-bottom: 10px;
+            }
+            .awards-container ul{
+                padding-left: 0;
+                list-style-position: inside;
+            }
+
+            .chart-container{
+                position: relative;
+                height: 400px;
+                width: 100%;
+            }
+            .field{
+                display: flex;
+            }
+
+            .modal{
+                display: none;  /*初期は非表示*/
+                position: fixed;
+                z-index: 200;   /*ナビゲーションより上位に表示*/
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+            .modal-content{
+                background-color: #1f1f1f;   /* 記事カードと同じダークな背景 */
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #333;      /* 少し濃いグレーの境界線 */
+                width: 80%;
+                max-width: 800px;
+                color: #fff;                 /* テキストは白に */
+                position: relative;
+                border-radius: 8px;
+            }
+            .close {
+                color: #aaa;
+                position: absolute;
+                right: 10px;
+                top: 5px;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            /*スクリーンショットエリア*/
+            .modal-screenshots{
+                /*margin-top: 20px;*/
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            .nav-btn {
+                background-color: #333;
+                color: #e0a800;
+                border: none;
+                padding: 10px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                border-radius: 50%;
+                transition: background-color 0.3s ease;
+            }
+
+            .nav-btn:hover {
+                background-color: #555;
+            }
+
+            .main-screenshot img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+            /* モーダル内の画像があれば、統一感を持たせる */
+            .modal-content img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+                border-radius: 8px;
+            }
+            /*サムネイル用コンテナ*/
+            .thumbnail-container{
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+                gap: 10px;
+            }
+            .thumbnail-container img {
+                width: 60px;
+                height: auto;
+                cursor: pointer;
+                border: 2px solid transparent;
+                border-radius: 4px;
+                transition: border-color 0.3s ease;
+            }
+            .thumbnail-container img:hover,
+            .thumbnail-container img.active {
+                border-color: #e0a800;
+            }
+            /* もしモーダル内でh2やh3を使うなら、メインのスタイルに合わせる */
+            .modal-content h2 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #e0a800;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+            .modal-content h3 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-left: 10px;
+                border-left: 4px solid #e0a800;
+                color: #fff;
+            }
+            .modal-content ol{
+                margin-left: 5%;
+            }
+            .modal-content ul{
+                margin-left: 5%;
+            }
+        </style>
+    </head>
+    <body>
+        <!--固定ナビゲーション-->
+        <nav>
+            <button class="menu-toggle">≡</button>
+            <ul>
+                <li><a href="#about">自己紹介</a></li>
+                <li><a href="#projects">プロジェクト</a></li>
+                <li><a href="#skills">スキル</a></li>
+                <li><a href="#contact">連絡先</a></li>
+            </ul>
+        </nav>
+
+        <!--ヒーローセクション-->
+        <header>
+            <h1>Sho Nishimura's Portfolio</h1>
+        </header>
+
+        <!--メインコンテンツ-->
+        <main>
+            <!--自己紹介セクション-->
+            <section id="about" data-aos="fade-up">
+                <h2>自己紹介</h2>
+                <p>西村　将 / Sho Nishimura</p>
+                <p>2026年度から高専5年生、情報系の部活動では2025年度後期から部長を務めています。</p>
+                <p>ゲーム開発だけでなく楽曲制作活動も行っており、現在までに制作した曲は50曲を超えています。</p>
+                <h3>主な受賞歴</h3>
+                <ul>
+                    <li>ETロボコン2024 東北地区大会: モデル審査部門3位　奨励賞</li>
+                </ul>
+            </section>
+
+            <!--プロジェクトセクション　ここに作ったやつをarticleに挟んで描いていく-->
+            <section id="projects" data-aos="fade-up">
+                <h2>プロジェクト</h2>
+                <div class="projects-grid">
+                    <article data-detail-id="lutaria" data-aos="zoom-in">
+                        <h3>Lutaria</h3>
+                        <img src="img/Lutaria_Title.png" alt="Lutariaのタイトル画像">
+                        <p>制作期間: 1週間</p>
+                        <p>制作人数: 1人</p>
+                        <p>制作目的: 自分のUnityのスキルでどこまで作りこめるか確認する</p>
+                        <p>使用技術: Unity, NotesEditor</p>
+                        <p>ジャンル: リズムゲーム</p>
+                        <a href="#" class="open-modal">詳細を見る</a>
+                    </article>
+                    <article data-detail-id="beatFighter" data-aos="zoom-in">
+                        <h3>BeatFighter</h3>
+                        <img src="img/BeatFighter_Title.png">
+                        <p>制作期間: 6ヶ月</p>
+                        <p>制作人数: 4人</p>
+                        <p>制作目的: 小学生向けエンタテインメントシステムを作る</p>
+                        <p>使用技術: </p>
+                        <ul>
+                            <li><p>DxLib</p></li>
+                            <li><p>erslib(シリアル通信用ライブラリ)</p></li>
+                            <li><p>SoftwareSerial(Bluetooth通信用)</p></li>
+                            <li><p>Arduino duemilanove</p></li>
+                            <li><p>加速度センサ、振動モータ等</p></li>
+                        </ul>
+                        <p>役割: リーダー, プログラマ(ゲーム、組み込み)</p>
+                        <p>ジャンル: 2Dリズムフィットネスゲーム</p>
+                        <a href="#" class="open-modal">詳細を見る</a>
+                    </article>
+                    <article data-detail-id="etrobo" data-aos="zoom-in">
+                        <h3>ETロボコンへの取り組み</h3>
+                        <img>
+                        <p>期間: 4ヶ月</p>
+                        <p>チーム人数: 6人</p>
+                        <p>目的: 組み込み技術やその設計手法について学び、受賞する</p>
+                        <p>使用技術:</p>
+                        <ul>
+                            <li><p>RaspberryPi</p></li>
+                            <li><p>RealVNC Viewer(ロボットへのリモート接続)</p></li>
+                            <li><p>HackSpi(ロボット)</p></li>
+                        </ul>
+                        <p>役割: リードプログラマ, システム設計も担当</p>
+                        <a href="#" class="open-modal">詳細を見る</a>
+                    </article>
+                    <article data-detail-id="fushigiWorks" data-aos="zoom-in">
+                        <h3>FushigiWorks (開発中のゲームエンジン)</h3>
+                        <img>
+                        <p>制作期間(現在まで): 4ヶ月(構想段階を含めると1年程)</p>
+                        <p>制作人数: 1人</p>
+                        <p>制作目的: 現代のグラフィックス技術について学び、ゲームエンジン設計について考える</p>
+                        <p>使用技術:</p>
+                        <ul>
+                            <li><p>DirectX12</p></li>
+                            <li><p>Assimp(3Dモデル読み込み用)</p></li>
+                            <li><p>WPF(エディタ制作)</p></li>
+                            <li><p>PySide2(エディタ制作)</p></li>
+                        </ul>
+                        <a href="#" class="open-modal">詳細を見る</a>
+                    </article>
+                    <article data-detail-id="markovAutomaticGeneration" data-aos="zoom-in">
+                        <h3>メロディ自動作成システム</h3>
+                        <img>
+                        <p>制作期間: 1年</p>
+                        <p>制作人数: 1人</p>
+                        <p>制作目的: AI技術が急速に発展し、AIが作成した絵や文章が話題となっていたが、自動作曲AIは聞いたことがなく、作りたいと考えたから</p>
+                        <p>使用技術:</p>
+                        <ul>
+                            <li><p>music21 (音楽情報処理ライブラリ)</p></li>
+                            <li><p>MuseScore3 (楽譜による作曲ソフト)</p></li>
+                            <li><p>morkovify (マルコフ連鎖等を行えるライブラリ)</p></li>
+                            <li><p>numpy</p></li>
+                            <li><p>graphviz (グラフ生成ライブラリ)</p></li>
+                        </ul>
+                        <a href="#" class="open-modal">詳細を見る</a>
+                    </article>
+                </div>
+            </section>
+
+            <!--スキルセクション-->
+            <section id="skills" data-aos="fade-up">
+                <h2>スキル</h2>
+                <div class="skills-grid">
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="toolsChart"></canvas>
+                    </div>
+                </div>
+                    <p>5: 熟練</p>
+                    <p>4: 応用的</p>
+                    <p>3: 標準的</p>
+                    <p>2: 基礎的</p>
+                    <p>1: 初歩的</p>
+                <div>
+                    <h3>プログラミング歴</h3>
+                    <ul>
+                        <li><p>C/C++ (3年半)</p></li>
+                        <li><p>C# (3年半)</p></li>
+                        <li><p>Python3系 (1年)</p></li>
+                        <li><p>JavaScript (1ヶ月半)</p></li>
+                        <li><p>HTML (10日)</p></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>ゲーム開発歴</h3>
+                    <ul>
+                        <li><p>DxLib (3年)</p></li>
+                        <li><p>Unity (3年)</p></li>
+                        <li><p>Siv3D (2ヶ月)</p></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>楽曲制作歴</h3>
+                    <ul>
+                        <li><p>iOS版GarageBand (6年)</p></li>
+                        <li><p>CakeWalk (1年)</p></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>エディタ</h3>
+                    <ul>
+                        <li><p>Visual Studio Code</p></li>
+                        <li><p>Visual Studio</p></li>
+                        <li><p>PyCharm</p></li>
+                        <li><p>JupyterNotebook</p></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!--連絡先セクション-->
+            <section id="contact" data-aos="fade-up">
+                <h2>連絡先</h2>
+                <p>Gmail: <a href="Nigiga.gigo@gmail.com">Nigiga.gigo@gmail.com</a></p>
+            </section>
+        </main>
+
+        <!--モーダルウィンドウひな形-->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-detail-content"></div>
+            </div>
+        </div>
+
+        <!--Lutaria詳細ウィンドウ-->
+        <div id="lutaria-detail" class="project-detail" style="display: none;">
+            <h2>Lutaria (リュータリア)</h2>
+            <div class="modal-screenshots" data-screenshots="img/Lutaria_MusicSelect.png, img/Lutaria_Playing.png, img/Lutaria_Result.png">
+                <button class="prev-btn nav-btn">&larr;</button>
+                <div class="main-screenshot">
+                    <img src="img/Luratia_Title.png" src="" alt="スクリーンショット">
+                </div>
+                <button class="next-btn nav-btn">&rarr;</button>
+            </div>
+            <h3>ゲームの詳細</h3>
+            <p>「Lutaria」はリズムゲームです。プレイヤーは収録されている曲(現在2曲)を選択して遊ぶことができます。</p>
+            <p>プレイの結果によりスコアが変化し、ミスなしでクリアすると"Full Combo"、全てPerfect判定だと"All Perfect"の評価をもらえます。</p>
+            <h3>工夫点</h3>
+            <p>神秘的な雰囲気を演出するため、被写界深度やビネットといったポストエフェクトを追加しました。</p>
+            <p>またポストエフェクトだけでなく、2Dライティングエフェクト(グラデーション背景等)をカメラ前に配置することで、さらに神秘的な印象を与えられるようにしました。</p>
+            <h3>開発背景</h3>
+            <p>もともとリズムゲームというジャンルが好きだった事もあり、自分で作ってみようと思ったことがきっかけです。</p>
+            <p>今ある有名なリズムゲームの世界観というものは様々なジャンルの要素を取り入れており、何か一つに特化したものではありません。</p>
+            <p>そのため、自分が好きな「ケルト、ジプシー風」の要素をメインとした物を作ろうと考えました。</p>
+            <p>タイトルは、"lute (リュート族の楽器)" + "aria (詠唱)" で "Lutaria" としています。</p>
+            <h3>見つかった課題とその解決方法</h3>
+            <ol>
+                <li><p>ゲームプレイ中、ノーツ判定タイミングが合わない</p><p>→ 楽曲再生タイミングと判定タイミングそれぞれの設定ができるようにする</p></li>
+            </ol>
+            <h3>今後の予定</h3>
+            <ul>
+                <li><p>オンラインランキング機能を搭載し、プレイヤーにスコアを競ってもらえるようにする。</p></li>
+                <li><p>新たに楽曲を追加したり、さらにUXを高めるため隠し楽曲やそれを解放するための謎解きギミックを追加する。</p></li>
+            </ul>
+        </div>
+        <!--BeatFighter詳細ウィンドウ-->
+        <div id="beatFighter-detail" class="project-detail" style="display: none;">
+            <h2>BeatFighter (ビートファイター)</h2>
+            <div class="modal-screenshots" data-screenshots="img/BeatFighter_MusicSelect.png, img/BeatFighter_Playing.png, img/BeatFighter_Result.png">
+                <button class="prev-btn nav-btn">&larr;</button>
+                <div class="main-screenshot">
+                    <img src="img/Luratia_Title.png" src="" alt="スクリーンショット">
+                </div>
+                <button class="next-btn nav-btn">&rarr;</button>
+            </div>
+            <h3>ゲームの詳細</h3>
+            <p>「BeatFighter」は2Dリズムフィットネスゲームです。小学生が楽しめるように、ドット調のデザインを採用しました。</p>
+            <p>プレイヤーは専用コントローラを手首と太ももに装着し、体を動かすことでキャラクターを操作します。</p>
+            <p>プレイヤーのする動作はジャンプ、パンチの二つで、迫りくる障害物をジャンプで飛び越え、襲ってくる敵をパンチで倒します。</p>
+            <h3>工夫点</h3>
+            <p>敵がパンチで倒されたとき、遠く彼方に飛んでいくようなエフェクトを作成しました。</p>
+            <p>さらに、パンチやジャンプがされたかが直感的にわかるように、手首コントローラに振動機能をつけ、画面上でもエフェクトを追加しました。</p>
+            <p>また、自作の譜面フォーマットにより、流れてくる譜面を簡単な楽譜のように記述できるようにしました。</p>
+            <h3>開発背景</h3>
+            <p>このゲームは高専4年生の情報実験で作成したエンタテインメントシステムです。</p>
+            <p>この情報実験は、情報コースの生徒が約4人ずつのグループに分かれ、企画会議から始めました。</p>
+            <p>最初に出た案としては、「3次元マインスイーパ」や「影絵シミュレータ」等でしたが、小学生が楽しめるかという点が残り続けました。</p>
+            <p>そこで私は文部科学省の小学生とスクリーンタイムの関係についてのデータをみて、圧倒的に運動時間が少ないことに気が付きました。</p>
+            <p>そのため、体を動かしながら楽しめるシステムを作成すれば一石二鳥なのではと考え、この「リズムフィットネス」というジャンルにたどり着きました。</p>
+            <h3>見つかった課題とその解決方法</h3>
+            <ol>
+                <li><p>シーン間の遷移時に次のシーンにデータを渡したい</p><p>→ 辞書データをシーン遷移関数の引数に渡すことで、遷移先でその値を使用できる。</p></li>
+                <li><p>ジャンプやパンチの判定に用いた加速度センサの値が安定せず、多重反応を起こす</p><p>→ 加速度の値にフィルタをかけ、しきい値を定めることによって、安定した判定にする</p></li>
+            </ol>
+            <h3>今後の予定</h3>
+            <ul>
+                <li><p>実際に小学生に体験してもらう機会を設け、率直な感想をもらい、改善する</p></li>
+            </ul>
+        </div>
+        <!--ETロボコン取り組み詳細ウィンドウ-->
+        <div id="etrobo-detail" class="project-detail" style="display: none;">
+            <h2>ETロボコン2024への取り組み</h2>
+            <h3>ETロボコンとは</h3>
+            <p>ETロボコンとは、課題のためにロボットから作り始めるロボットコンテストとは違い、全チーム同じ機体を使ってレースをするものです。</p>
+            <p>競技はスタートからコース途中のゲートまでのタイムアタック、コース終盤の難関コースの攻略率による審査がされます。</p>
+            <p>審査は競技の成績だけでなく、ソフトウェアモデリング(設計)の技能も問われます。</p>
+            <p>このような取り組みによって、チーム開発で必要なプロジェクトマネジメント、チームビルディング等を学ぶことができます。</p>
+            <h3>役割</h3>
+            <p>チームの中で過去にETロボコンに出場したことがあるメンバーは自分だけだったため、プログラム開発、設計の両方を担当しました。</p>
+            <h3>基本的な活動</h3>
+            <p>まずはチーム全員でどのようにコースを攻略するか話し合い、一番安定感があり、ある程度のタイムも出せるようなルートどりを目標に開発を始めました。</p>
+            <p>攻略法を決めたらまず要求分析を行って機能のリストアップをし、足りない技術について習得しました。</p>
+            <p>その後、その習得した技術等を基に図に起こして設計し、逐次コーディングしていきました。</p>
+            <h3>直面した課題</h3>
+            <p>基本的なコーディングの問題は自分でマニュアルなどを見ながら解決することができました。</p>
+            <p>しかし開発中、この大会の基本技能となるライントレース走行がうまくいかず、開始早々コースアウトしてしまう問題が発生しました。</p>
+            <p>しかしチームメンバーが「この値はこのくらいでよさそう」や「こんな動きすればいい」等、様々な意見をくれたため、メンバーと協力しつつ競技を完走できる所まで持っていきました。</p>
+            <h3>大会当日</h3>
+            <p>結果はモデル審査部門3位でしたが、競技ではあまりいいスコアが出せず、総合順位も半分ほどになってしまいましたが、結果的に奨励賞をとることができました。</p>
+            <h3>大会を通して</h3>
+            <p>2年間のETロボコン出場経験を通して、やはりチーム開発はプログラム開発において重要だと改めて実感しました。</p>
+            <p>ETロボコン2023では、3人チームで出場しましたが、取り掛かりの遅さやワンマンのプログラミングによるメンバーのプログラム理解の時間長時間化(自分含め)等があり、大会でも成績は残せませんでした。</p>
+            <p>2024年大会ではそのような問題が発生しないように行動できたので受賞することができたと考えています。</p>
+        </div>
+        <!--FushigiWorks詳細ウィンドウ-->
+        <div id="fushigiWorks-detail" class="project-detail" style="display: none;">
+            <h2>FushigiWorks (不思議ワークス)</h2>
+            <h3>詳細</h3>
+            <p>FushigiWorksは現在開発中のゲームエンジンです。Unityライクなゲームエンジンを目指しています。</p>
+            <h3>工夫点</h3>
+            <p>シーン情報をjsonファイルに格納することで、シーンのロードとセーブが用意に行えるようにしました。</p>
+            <p>ScriptableBaseクラスを継承することで、各オブジェクトの振る舞いを簡単に処理、記述できるようにしました。</p>
+            <p>現在は開発できていませんが、エディタ部分とランタイム部分を別exeで実行し、IPC通信によって連携させるため、片方がクラッシュしてももう片方は影響を受けない設計にしようと考えています。</p>
+            <h3>開発背景</h3>
+            <p>Unityでゲームを開発していた時、ふと内部処理がどうなったか気になったのがきっかけで、学校の図書館にあったゲームエンジン設計の本を読みました。</p>
+            <p>そこにはおびただしい数式の数や、見たことも聞いたこともない概念が描かれていて、正直恐怖さえ感じていましたが、同時に好奇心が湧いていました。</p>
+            <h3>見つかった課題とその解決方法</h3>
+            <ol>
+                <li><p>画像を描画しようとすると上下左右が反転してしまう</p><p>→ 適切なアスペクト比と視野角を与える</p></li>
+                <li><p>頂点バッファやインデックスバッファの処理を逐次描いていたため非常に効率が悪い</p><p>それぞれを使いやすいクラスにまとめる</p></li>
+                <li><p>シェーダーを書き換えないと白黒表示やエンボス加工表示、ぼかしなどの処理ができない</p><p>条件分岐などを使って適切なシェーダーを選択する(未実装)</p></li>
+                <li><p>実行すると最大60FPSが出る設定にしているが30FPS程しか出ない</p><p>mapで保存しているコンポーネントデータをベクター等に保存するようにし、イテレーション効率を高める(未実装)</p></li>
+            </ol>
+            <h3>今後の予定</h3>
+            <ul>
+                <li><p>安定して最大FPSが出るようなメモリ管理を行えるようにする</p></li>
+                <li><p>エディタ部分を作成し、エディタ側でオブジェクトのデータを変更できるようにする</p></li>
+            </ul>
+        </div>
+        <!--メロディ自動生成システム詳細ウィンドウ-->
+        <div id="markovAutomaticGeneration-detail" class="project-detail" style="display: none;">
+            <h2>メロディ自動生成システム</h2>
+            <div class="modal-screenshots" data-screenshots="img/Probability_Visualization.png">
+                <button class="prev-btn nav-btn">&larr;</button>
+                <div class="main-screenshot">
+                    <img src="img/Luratia_Title.png" src="" alt="スクリーンショット">
+                </div>
+                <button class="next-btn nav-btn">&rarr;</button>
+            </div>
+            <h3>システム詳細</h3>
+            <p>このシステムは事前に学習させたデータによって、自動でメロディを生成してくれるものです。</p>
+            <h3>開発背景</h3>
+            <p>メインのページにも書きましたが、きっかけはAIが作成した絵や文章をよく見かけるようになったことです。</p>
+            <p>このシステムを開発した当時はまだAI技術が有名になり始めた頃で、純粋に楽しそうだと感じたので「何かAIを使った作品を作りたい」と考えました。</p>
+            <p>簡単な機械学習アルゴリズムとして「マルコフ連鎖」というものを見つけたため、これをベースに開発していく事にしました。</p>
+            <h3>見つかった課題とその解決方法</h3>
+            <ol>
+                <li><p>実際、マルコフ連鎖アルゴリズムがどのように確率を決定しているか分からない</p><p>→ 確率行列を表示可能にしたり、グラフ化ライブラリを用いて確率遷移図を作成できるようにする</p></li>
+            </ol>
+            <h3>今後の予定</h3>
+            <ul>
+                <li><p>現在はメロディデータの入力は全て手作業であったが、音楽ファイル(wavファイルなど)を読み込むだけで良いシステムを作成したい</p></li>
+            </ul>
+        </div>
+
+        <!--フッター-->
+        <footer>
+            <p>&copy; 2025 Sho Nishimura. All rights reserved.</p>
+        </footer>
+
+        <!--GSAPとAOSのライブラリ読み込み-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        <script>
+            //GSAPを使って、ヘッダーのタイトルをページロード時にアニメーション表示
+            gsap.from("header h1", {
+                duration: 1.5,
+                y: -50,
+                opacity: 0,
+                ease: "power2.out"
+            });
+
+            //AOSを初期化(スクロール時のアニメーションを有効化)
+            AOS.init({
+                duration: 1000
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+            const menuToggle = document.querySelector(".menu-toggle");
+            const navMenu = document.querySelector("nav ul");
+
+            menuToggle.addEventListener("click", function () {
+                navMenu.classList.toggle("show"); // メニューを開閉
+            });
+
+            // スクロール時のナビゲーション縮小
+            window.addEventListener("scroll", function () {
+                const nav = document.querySelector("nav");
+                if (window.scrollY > 50) {
+                    nav.classList.add("scrolled");
+                } else {
+                    nav.classList.remove("scrolled");
+                }
+            });
+        });
+        </script>
+        <script src="src/SkillsChart.js"></script>
+        <script src="src/ToolSkillsChart.js"></script>
+        <script src="src/ModalControl.js"></script>
+    </body>
+</html>
